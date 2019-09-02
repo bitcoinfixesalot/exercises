@@ -1,1 +1,0 @@
-C:\Users\satan\exercism\rust\armstrong-numbers\target\debug\armstrong_numbers-08aa6e5543e871f7.exe: C:\Users\satan\exercism\rust\armstrong-numbers\src\lib.rs C:\Users\satan\exercism\rust\armstrong-numbers\tests\armstrong-numbers.rs

@@ -1,1 +1,0 @@
-C:\Users\satan\exercism\rust\reverse-string\target\debug\reverse_string-dd1197ae2257afc0.exe: C:\Users\satan\exercism\rust\reverse-string\src\lib.rs C:\Users\satan\exercism\rust\reverse-string\tests\reverse-string.rs

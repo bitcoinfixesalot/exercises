@@ -1,1 +1,0 @@
-C:\Users\satan\exercism\rust\prime-factors\target\debug\prime_factors-a4298b01ea1b86b4.exe: C:\Users\satan\exercism\rust\prime-factors\src\lib.rs C:\Users\satan\exercism\rust\prime-factors\tests\prime-factors.rs

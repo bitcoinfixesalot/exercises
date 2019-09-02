@@ -1,0 +1,1 @@
+C:\Users\satan\exercism\rust\hello-world\target\debug\hello_world-f5d045cc6c9e910f.exe: C:\Users\satan\exercism\rust\hello-world\src\lib.rs C:\Users\satan\exercism\rust\hello-world\tests\hello-world.rs

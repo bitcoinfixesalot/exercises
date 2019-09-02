@@ -1,0 +1,1 @@
+C:\Users\satan\exercism\rust\sum-of-multiples\target\debug\sum_of_multiples-b4f5a2c700f805eb.exe: C:\Users\satan\exercism\rust\sum-of-multiples\src\lib.rs C:\Users\satan\exercism\rust\sum-of-multiples\tests\sum-of-multiples.rs

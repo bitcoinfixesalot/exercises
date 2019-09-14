@@ -5,6 +5,7 @@ use say;
 // where it is common in British English to use the 'and'.
 
 #[test]
+#[ignore]
 fn test_zero() {
     assert_eq!(say::encode(0), String::from("zero"));
 }
@@ -117,7 +118,6 @@ fn test_one_billion() {
 }
 
 #[test]
-#[ignore]
 fn test_987654321123() {
     assert_eq!(
         say::encode(987_654_321_123),

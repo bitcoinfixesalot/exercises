@@ -1,12 +1,12 @@
-const A_NUMBER: u8 = 97;
-const Z_NUMBER: u8 = 122;
+const A_NUMBER: u8 = b'a';
+const Z_NUMBER: u8 = b'z';
 
 /// "Encipher" with the Atbash cipher.
 pub fn encode(plain: &str) -> String {
     plain
         .to_lowercase()
         .chars()
-        .filter(|c| !c.is_whitespace() && c.is_alphanumeric() && c.is_ascii())
+        .filter(|c| c.is_ascii_alphanumeric())
         .map(to_atbash_char)
         .collect::<Vec<char>>()
         .chunks(5)

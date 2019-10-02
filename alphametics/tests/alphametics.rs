@@ -8,6 +8,7 @@ fn assert_alphametic_solution_eq(puzzle: &str, solution: &[(char, u8)]) {
 }
 
 #[test]
+#[ignore]
 fn test_with_three_letters() {
     assert_alphametic_solution_eq("I + BB == ILL", &[('I', 1), ('B', 9), ('L', 0)]);
 }
@@ -20,7 +21,6 @@ fn test_must_have_unique_value_for_each_letter() {
 }
 
 #[test]
-#[ignore]
 fn test_leading_zero_solution_is_invalid() {
     let answer = alphametics::solve("ACA + DD == BD");
     assert_eq!(answer, None);

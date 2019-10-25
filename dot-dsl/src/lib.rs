@@ -35,10 +35,6 @@ pub mod graph {
         pub fn get_node(&self, v: &str) -> Option<&Node> {
             self.nodes.iter().find(|a| a.v == v)
         }
-
-        pub fn get_attr(&self, k: &str) -> Option<&str> {
-            self.attrs.get(k).and_then(|value| Some(value.as_str()))
-        }
     }
     impl Attrs for Graph {}
 
@@ -66,10 +62,6 @@ pub mod graph {
                 pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
                     self.attrs = Self::attrs_to_hashmap(attrs);
                     self
-                }
-
-                pub fn get_attr(&self, k: &str) -> Option<&str> {
-                    self.attrs.get(k).and_then(|value| Some(value.as_str()))
                 }
             }
             impl Attrs for Edge {}

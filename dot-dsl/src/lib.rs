@@ -1,5 +1,6 @@
 pub mod graph {
-    use crate::converter;
+    use crate::converter::Attrs;
+
     use graph_items::edge::Edge;
     use graph_items::node::Node;
     use std::collections::HashMap;
@@ -27,7 +28,7 @@ pub mod graph {
         }
 
         pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
-            self.attrs = converter::attrs_to_hashmap(attrs);
+            self.attrs = Self::attrs_to_hashmap(attrs);
             self
         }
 
@@ -39,10 +40,11 @@ pub mod graph {
             self.attrs.get(k).and_then(|value| Some(value.as_str()))
         }
     }
+    impl Attrs for Graph {}
 
     pub mod graph_items {
         pub mod edge {
-            use crate::converter;
+            use crate::converter::Attrs;
             use std::collections::HashMap;
 
             #[derive(Clone, Debug, Eq, PartialEq)]
@@ -62,7 +64,7 @@ pub mod graph {
                 }
 
                 pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
-                    self.attrs = converter::attrs_to_hashmap(attrs);
+                    self.attrs = Self::attrs_to_hashmap(attrs);
                     self
                 }
 
@@ -70,9 +72,10 @@ pub mod graph {
                     self.attrs.get(k).and_then(|value| Some(value.as_str()))
                 }
             }
+            impl Attrs for Edge {}
         }
         pub mod node {
-            use crate::converter;
+            use crate::converter::Attrs;
             use std::collections::HashMap;
 
             #[derive(Clone, Debug, Eq, PartialEq)]
@@ -90,7 +93,7 @@ pub mod graph {
                 }
 
                 pub fn with_attrs(mut self, attrs: &[(&str, &str)]) -> Self {
-                    self.attrs = converter::attrs_to_hashmap(attrs);
+                    self.attrs = Self::attrs_to_hashmap(attrs);
                     self
                 }
 
@@ -98,19 +101,21 @@ pub mod graph {
                     self.attrs.get(k).and_then(|value| Some(value.as_str()))
                 }
             }
+            impl Attrs for Node {}
         }
     }
 }
 
-mod converter {
+pub mod converter {
     use std::collections::HashMap;
-
-    pub fn attrs_to_hashmap<'a, 'b, 'c>(
-        attrs: &'a [(&'b str, &'c str)],
-    ) -> HashMap<String, String> {
-        attrs
-            .iter()
-            .map(|(key, value)| (key.to_string(), value.to_string()))
-            .collect()
+    pub trait Attrs {
+        fn attrs_to_hashmap<'a, 'b, 'c>(
+            attrs: &'a [(&'b str, &'c str)],
+        ) -> HashMap<String, String> {
+            attrs
+                .iter()
+                .map(|(key, value)| (key.to_string(), value.to_string()))
+                .collect()
+        }
     }
 }

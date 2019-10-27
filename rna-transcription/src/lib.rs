@@ -8,6 +8,12 @@ pub struct RNA {
     nucleotides: String,
 }
 
+const A: char = 'A';
+const C: char = 'C';
+const G: char = 'G';
+const T: char = 'T';
+const U: char = 'U';
+
 impl DNA {
     pub fn new(dna: &str) -> Result<DNA, usize> {
         if dna.chars().all(is_valid_dna_nucleotide) {
@@ -25,10 +31,10 @@ impl DNA {
                 .nucleotides
                 .chars()
                 .map(|c| match c {
-                    'G' => 'C',
-                    'C' => 'G',
-                    'T' => 'A',
-                    'A' => 'U',
+                    G => C,
+                    C => G,
+                    T => A,
+                    A => U,
                     _ => c,
                 })
                 .collect::<String>(),
@@ -48,10 +54,11 @@ impl RNA {
         Err(0)
     }
 }
-fn is_valid_dna_nucleotide(n: char) -> bool {
-    n == 'G' || n == 'C' || n == 'T' || n == 'A'
+
+fn is_valid_dna_nucleotide(c: char) -> bool {
+    c == A || c == C || c == G || c == T
 }
 
-fn is_valid_rna_nucleotide(n: char) -> bool {
-    n == 'G' || n == 'C' || n == 'U' || n == 'A'
+fn is_valid_rna_nucleotide(c: char) -> bool {
+    c == A || c == C || c == G || c == U
 }

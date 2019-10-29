@@ -1,6 +1,7 @@
 use spiral_matrix::*;
 
 #[test]
+#[ignore]
 fn empty_spiral() {
     let expected: Vec<Vec<u32>> = Vec::new();
     assert_eq!(spiral_matrix(0), expected);
@@ -32,7 +33,6 @@ fn size_three_spiral() {
     assert_eq!(spiral_matrix(3), expected);
 }
 #[test]
-#[ignore]
 fn size_four_spiral() {
     let mut expected: Vec<Vec<u32>> = Vec::new();
     expected.push(vec![1, 2, 3, 4]);

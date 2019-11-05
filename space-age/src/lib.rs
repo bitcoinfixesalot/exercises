@@ -1,6 +1,3 @@
-// The code below is a stub. Just enough to satisfy the compiler.
-// In order to pass the tests you can add-to or change any of this code.
-
 #[derive(Debug)]
 pub struct Duration {
     seconds: f64,
@@ -13,61 +10,32 @@ impl From<u64> for Duration {
 }
 
 pub trait Planet {
-    fn earth_years() -> f64;
+    const EARTH_YEARS: f64;
 
     fn years_during(d: &Duration) -> f64 {
-        d.seconds / SECONDS_IN_YEAR_ON_EARTH / Self::earth_years()
+        d.seconds / SECONDS_IN_YEAR_ON_EARTH / Self::EARTH_YEARS
     }
 }
-
-pub struct Mercury;
-pub struct Venus;
-pub struct Earth;
-pub struct Mars;
-pub struct Jupiter;
-pub struct Saturn;
-pub struct Uranus;
-pub struct Neptune;
 
 const SECONDS_IN_YEAR_ON_EARTH: f64 = 31557600.0;
 
-impl Planet for Mercury {
-    fn earth_years() -> f64 {
-        0.2408467
-    }
+macro_rules! planet_trait_impl {
+    ($($type:ident => $x:expr,)+) => (planet_trait_impl!{$($type => $x),+});
+    ($($type:ident => $x:expr),*) => ($(
+        pub struct $type;
+        impl Planet for $type {
+            const EARTH_YEARS: f64 = $x;
+        }
+    )*)
 }
-impl Planet for Venus {
-    fn earth_years() -> f64 {
-        0.61519726
-    }
-}
-impl Planet for Earth {
-    fn earth_years() -> f64 {
-        1.0
-    }
-}
-impl Planet for Mars {
-    fn earth_years() -> f64 {
-        1.8808158
-    }
-}
-impl Planet for Jupiter {
-    fn earth_years() -> f64 {
-        11.862615
-    }
-}
-impl Planet for Saturn {
-    fn earth_years() -> f64 {
-        29.447498
-    }
-}
-impl Planet for Uranus {
-    fn earth_years() -> f64 {
-        84.016846
-    }
-}
-impl Planet for Neptune {
-    fn earth_years() -> f64 {
-        164.79132
-    }
+
+planet_trait_impl! {
+    Mercury => 0.240_846_7,
+    Venus => 0.615_197_26,
+    Earth => 1.0,
+    Mars => 1.880_815_8,
+    Jupiter => 11.862_615,
+    Saturn => 29.447_498,
+    Uranus => 84.016_846,
+    Neptune => 164.791_32,
 }

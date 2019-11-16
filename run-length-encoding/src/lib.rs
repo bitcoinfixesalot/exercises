@@ -9,21 +9,14 @@ pub fn encode(source: &str) -> String {
                 count += 1;
                 continue;
             }
-
-            if count > 1 {
-                encoded.push_str(&count.to_string());
-            }
-            encoded.push(old_series);
+            append_encoded(&mut encoded, &old_series, &count)
         }
         count = 1;
         series = Some(c);
     }
 
     if let Some(old_series) = series {
-        if count > 1 {
-            encoded.push_str(&count.to_string());
-        }
-        encoded.push(old_series);
+        append_encoded(&mut encoded, &old_series, &count)
     }
 
     encoded
@@ -39,13 +32,18 @@ pub fn decode(source: &str) -> String {
             continue;
         }
 
-        if count.len() == 0 {
-            count = "1".to_string();
-        }
-
-        decoded.push_str(&(c.to_string().repeat(count.parse::<usize>().unwrap())));
-        count = String::new();
+        decoded.push_str(&(c.to_string().repeat(count.parse().unwrap_or(1))));
+        count.clear();
     }
 
     decoded
+}
+
+fn append_encoded(encoded: &mut String, letter: &char, count: &i32) {
+    if *count > 1 {
+        encoded.push_str(&count.to_string());
+    }
+    if *count > 0 {
+        encoded.push(*letter);
+    }
 }

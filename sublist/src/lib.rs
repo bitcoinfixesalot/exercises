@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 #[derive(Debug, PartialEq)]
 pub enum Comparison {
     Equal,
@@ -7,10 +8,10 @@ pub enum Comparison {
 }
 
 pub fn sublist<T: PartialEq>(first_list: &[T], second_list: &[T]) -> Comparison {
-    match (first_list.len(), second_list.len()) {
-        (f, s) if f == s && is_sub(first_list, second_list) => Comparison::Equal,
-        (f, s) if f < s && is_sub(first_list, second_list) => Comparison::Sublist,
-        (f, s) if f > s && is_sub(second_list, first_list) => Comparison::Superlist,
+    match first_list.len().cmp(&second_list.len()) {
+        Ordering::Equal if is_sub(first_list, second_list) => Comparison::Equal,
+        Ordering::Less if is_sub(first_list, second_list) => Comparison::Sublist,
+        Ordering::Greater if is_sub(second_list, first_list) => Comparison::Superlist,
         _ => Comparison::Unequal,
     }
 }

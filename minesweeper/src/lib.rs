@@ -35,13 +35,8 @@ fn mines_count(minefield: &[&str], i: usize, j: usize) -> Option<u8> {
 
 fn neighbours(x: i32, y: i32) -> [(i32, i32); 8] {
     [
-        (x - 1, y - 1),
-        (x, y - 1),
-        (x + 1, y - 1),
-        (x - 1, y),
-        (x + 1, y),
-        (x - 1, y + 1),
-        (x, y + 1),
-        (x + 1, y + 1),
+        (x-1, y-1), (x, y-1), (x+1, y-1),
+        (x-1, y),               (x+1, y),
+        (x-1, y+1), (x, y+1), (x+1, y+1)
     ]
 }

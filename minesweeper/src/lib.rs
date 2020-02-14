@@ -29,10 +29,9 @@ fn mines_count(minefield: &[&str], i: usize, j: usize) -> Option<u8> {
             {
                 continue;
             } else if &minefield[i + 1 - x][(j + 1 - y)..(j + 2 - y)] == "*" {
-                count += 1
+                count += 1;
             }
         }
     }
-
     Some(count)
 }

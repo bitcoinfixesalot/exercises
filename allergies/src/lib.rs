@@ -35,7 +35,7 @@ impl Allergen {
 
 impl Allergies {
     pub fn new(score: u32) -> Self {
-        Allergies { score: score }
+        Allergies { score }
     }
 
     pub fn is_allergic_to(&self, allergen: &Allergen) -> bool {

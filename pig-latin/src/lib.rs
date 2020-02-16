@@ -1,13 +1,12 @@
 pub fn translate(input: &str) -> String {
     input
         .split(' ')
-        .map(pig_latin)
+        .map(to_pig_latin)
         .collect::<Vec<String>>()
         .join(" ")
 }
 
-
-fn pig_latin(word: &str) -> String {
+fn to_pig_latin(word: &str) -> String {
     let mut i = if word.starts_with('y') {
         word.find(|c| "aeiou".contains(c)).unwrap()
     } else {

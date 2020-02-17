@@ -8,8 +8,16 @@ pub enum Error {
 pub fn to_bytes(values: &[u32]) -> Vec<u8> {
     values
         .iter()
-        .flat_map(|&v| convert_number(v))
-        .collect::<Vec<u8>>()
+        .flat_map(|&n| {
+            let mut bytes = vec![0x7f & n as u8];
+            let mut n = n >> 7;
+            while n != 0 {
+                bytes.insert(0, (0x7f & n as u8) | 0x80);
+                n >>= 7;
+            }
+            bytes
+        })
+        .collect()
 }
 
 /// Given a stream of bytes, extract all numbers which are encoded in there.
@@ -30,24 +38,4 @@ pub fn from_bytes(bytes: &[u8]) -> Result<Vec<u32>, Error> {
         }
     }
     Ok(values)
-}
-
-fn convert_number(n: u32) -> Vec<u8> {
-    if n == 0 {
-        return vec![0];
-    }
-
-    let mut v = n;
-    let mut result: Vec<u8> = Vec::new();
-    while v != 0 {
-        let current = (v % 128) as u8;
-        if result.is_empty() {
-            result.insert(0, current);
-        } else {
-            result.insert(0, current | 0x80);
-        }
-        v /= 128;
-    }
-
-    result
 }

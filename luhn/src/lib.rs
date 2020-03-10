@@ -14,9 +14,4 @@ pub fn is_valid(code: &str) -> bool {
             })
         })
         .map_or(false, |(sum, count)| count > 1 && sum % 10 == 0)
-
-    // match result {
-    //     Some((sum, count)) => count > 1 && sum % 10 == 0,
-    //     None => false,
-    // }
 }

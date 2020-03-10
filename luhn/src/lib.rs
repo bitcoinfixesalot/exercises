@@ -1,7 +1,6 @@
 /// Check a Luhn checksum.
 pub fn is_valid(code: &str) -> bool {
-    let result = code
-        .chars()
+    code.chars()
         .filter(|c| !c.is_whitespace())
         .rev()
         .enumerate()
@@ -13,10 +12,11 @@ pub fn is_valid(code: &str) -> bool {
                 }
                 (sum + acc, count + 1)
             })
-        });
+        })
+        .map_or(false, |(sum, count)| count > 1 && sum % 10 == 0)
 
-    match result {
-        Some((sum, count)) => count > 1 && sum % 10 == 0,
-        None => false,
-    }
+    // match result {
+    //     Some((sum, count)) => count > 1 && sum % 10 == 0,
+    //     None => false,
+    // }
 }

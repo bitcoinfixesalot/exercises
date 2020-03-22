@@ -4,10 +4,10 @@ use rand::Rng;
 use std::collections::HashSet;
 use std::sync::Mutex;
 
-const MAX_TRIALS: usize = 100;
+const MAX: usize = 100;
 
 lazy_static! {
-    static ref USED: Mutex<HashSet<String>> = Mutex::new(HashSet::new());
+    static ref UNIQUE: Mutex<HashSet<String>> = Mutex::new(HashSet::new());
 }
 pub struct Robot {
     name: String,
@@ -30,16 +30,16 @@ impl Robot {
 }
 
 fn unique_random_name() -> String {
-    for _ in 0..MAX_TRIALS {
+    for _ in 0..MAX {
         let name: String = random_name();
-        let mut used = USED.lock().unwrap();
+        let mut used = UNIQUE.lock().unwrap();
         if !used.contains(&name) {
             used.insert(name.clone());
             return name;
         }
     }
 
-    panic!("Unable to find an unique name after {} trials.", MAX_TRIALS);
+    panic!("Unable to find an unique name after {} trials.", MAX);
 }
 
 fn random_name() -> String {

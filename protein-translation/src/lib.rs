@@ -5,7 +5,7 @@ pub struct CodonsInfo<'a> {
 
 impl<'a> CodonsInfo<'a> {
     pub fn name_for(&self, codon: &str) -> Option<&'a str> {
-       self.bmap.get(codon).cloned()
+        self.bmap.get(codon).cloned()
     }
 
     pub fn of_rna(&self, rna: &str) -> Option<Vec<&'a str>> {
@@ -27,7 +27,6 @@ impl<'a> CodonsInfo<'a> {
             Some(names)
         }
     }
-    
 }
 
 pub fn parse<'a>(pairs: Vec<(&'a str, &'a str)>) -> CodonsInfo<'a> {
@@ -35,6 +34,5 @@ pub fn parse<'a>(pairs: Vec<(&'a str, &'a str)>) -> CodonsInfo<'a> {
     for (codon, name) in pairs {
         btree.insert(codon, name);
     }
-    CodonsInfo{ bmap:btree}
-
+    CodonsInfo { bmap: btree }
 }

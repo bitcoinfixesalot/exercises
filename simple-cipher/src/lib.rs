@@ -1,20 +1,21 @@
-use rand::Rng;
-
+use rand::distributions::Alphanumeric;
+use rand::{thread_rng, Rng};
 pub fn encode(key: &str, s: &str) -> Option<String> {
-    code(key, s, shift_right)
+    shift_all(key, s, shift_right)
 }
 
 pub fn decode(key: &str, s: &str) -> Option<String> {
-    code(key, s, shift_left)
+    shift_all(key, s, shift_left)
 }
 
 pub fn encode_random(s: &str) -> (String, String) {
-    let mut rng = rand::thread_rng();
-    let key: String = (0..100)
-        .map(|_| rng.gen_range(b'a', b'z' + 1) as char)
+    let key: String = thread_rng()
+        .sample_iter(&Alphanumeric)
+        .filter(|c| c.is_ascii_lowercase())
+        .take(100)
         .collect();
-    let cipher = encode(&key, s).unwrap();
-    (key, cipher)
+    let encoded = encode(&key, s);
+    (key, encoded.unwrap())
 }
 
 fn shift(symbol: char, by: i8) -> char {
@@ -30,7 +31,7 @@ fn shift_left(symbol: char, by: char) -> char {
     shift(symbol, -((by as u8 - b'a') as i8))
 }
 
-fn code<F>(key: &str, s: &str, shift_fn: F) -> Option<String>
+fn shift_all<F>(key: &str, s: &str, shift_fn: F) -> Option<String>
 where
     F: Fn(char, char) -> char,
 {

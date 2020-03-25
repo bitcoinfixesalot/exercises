@@ -1,20 +1,21 @@
-// pub fn encode(key: &str, s: &str) -> Option<String> {
-//     unimplemented!("Use {} to encode {} using shift cipher", key, s)
-// }
-
-// pub fn decode(key: &str, s: &str) -> Option<String> {
-//     unimplemented!("Use {} to decode {} using shift cipher", key, s)
-// }
-
-// pub fn encode_random(s: &str) -> (String, String) {
-//     unimplemented!(
-//         "Generate random key with only a-z chars and encode {}. Return tuple (key, encoded s)",
-//         s
-//     )
-// }
-
-
 use rand::Rng;
+
+pub fn encode(key: &str, s: &str) -> Option<String> {
+    code(key, s, shift_right)
+}
+
+pub fn decode(key: &str, s: &str) -> Option<String> {
+    code(key, s, shift_left)
+}
+
+pub fn encode_random(s: &str) -> (String, String) {
+    let mut rng = rand::thread_rng();
+    let key: String = (0..100)
+        .map(|_| rng.gen_range(b'a', b'z' + 1) as char)
+        .collect();
+    let cipher = encode(&key, s).unwrap();
+    (key, cipher)
+}
 
 fn shift(symbol: char, by: i8) -> char {
     let symbol = symbol as u8 - b'a';
@@ -44,21 +45,4 @@ where
             })
             .collect(),
     }
-}
-
-pub fn encode(key: &str, s: &str) -> Option<String> {
-    code(key, s, shift_right)
-}
-
-pub fn decode(key: &str, s: &str) -> Option<String> {
-    code(key, s, shift_left)
-}
-
-pub fn encode_random(s: &str) -> (String, String) {
-    let mut rng = rand::thread_rng();
-    let key: String = (0..100)
-        .map(|_| rng.gen_range(b'a', b'z' + 1) as char)
-        .collect();
-    let cipher = encode(&key, s).unwrap();
-    (key, cipher)
 }

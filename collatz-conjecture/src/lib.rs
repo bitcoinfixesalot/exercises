@@ -1,7 +1,6 @@
 pub fn collatz(n: u64) -> Option<u64> {
     match n {
         0 => None,
-        1 => Some(0),
         _ => {
             let mut n = n;
             let mut steps = 0;

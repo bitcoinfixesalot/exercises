@@ -1,4 +1,6 @@
 use std::collections::BTreeMap;
+use std::iter::FromIterator;
+
 pub struct CodonsInfo<'a> {
     bmap: BTreeMap<&'a str, &'a str>,
 }
@@ -30,9 +32,7 @@ impl<'a> CodonsInfo<'a> {
 }
 
 pub fn parse<'a>(pairs: Vec<(&'a str, &'a str)>) -> CodonsInfo<'a> {
-    let mut btree: BTreeMap<&'a str, &'a str> = BTreeMap::new();
-    for (codon, name) in pairs {
-        btree.insert(codon, name);
+    CodonsInfo {
+        bmap: BTreeMap::from_iter(pairs.into_iter()),
     }
-    CodonsInfo { bmap: btree }
 }

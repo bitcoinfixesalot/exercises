@@ -1,7 +1,10 @@
 pub fn series(digits: &str, len: usize) -> Vec<String> {
-    unimplemented!(
-        "What are the series of length {} in string {:?}",
-        len,
-        digits
-    )
+    if len == 0 {
+        return vec!["".to_string(); digits.len() + 1];
+    }
+    digits
+        .as_bytes()
+        .windows(len)
+        .map(|w| w.iter().map(|&b| b as char).collect())
+        .collect()
 }

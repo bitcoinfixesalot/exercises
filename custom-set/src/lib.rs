@@ -1,15 +1,16 @@
+use std::collections::HashSet;
+use std::hash::Hash;
+
 #[derive(Debug, PartialEq)]
-pub struct CustomSet<T> {
-    set: Vec<T>,
+pub struct CustomSet<T: Eq + Hash> {
+    set: HashSet<T>,
 }
 
-impl<T: Clone + PartialEq + Ord> CustomSet<T> {
+impl<T: Eq + Hash + Clone> CustomSet<T> {
     pub fn new(input: &[T]) -> Self {
-        let mut custom_set = CustomSet {
-            set: input.to_vec(),
-        };
-        custom_set.set.sort();
-        custom_set
+        Self {
+            set: input.iter().cloned().collect(),
+        }
     }
 
     pub fn contains(&self, element: &T) -> bool {
@@ -17,14 +18,11 @@ impl<T: Clone + PartialEq + Ord> CustomSet<T> {
     }
 
     pub fn add(&mut self, element: T) {
-        if !self.set.contains(&element) {
-            self.set.push(element);
-            self.set.sort();
-        }
+        self.set.insert(element);
     }
 
     pub fn is_subset(&self, other: &Self) -> bool {
-        self.set.iter().all(|element| other.contains(element))
+        self.set.is_subset(&other.set)
     }
 
     pub fn is_empty(&self) -> bool {
@@ -32,34 +30,24 @@ impl<T: Clone + PartialEq + Ord> CustomSet<T> {
     }
 
     pub fn is_disjoint(&self, other: &Self) -> bool {
-        !self.set.iter().any(|element| other.contains(element))
+        self.set.is_disjoint(&other.set)
     }
 
     pub fn intersection(&self, other: &Self) -> Self {
-        let mut set = CustomSet { set: Vec::new() };
-        for element in self.set.iter() {
-            if other.contains(element) {
-                set.add(element.clone());
-            }
+        Self {
+            set: self.set.intersection(&other.set).cloned().collect(),
         }
-        set
     }
 
     pub fn difference(&self, other: &Self) -> Self {
-        let mut set = CustomSet { set: Vec::new() };
-        for element in self.set.iter() {
-            if !other.contains(element) {
-                set.add(element.clone());
-            }
+        Self {
+            set: self.set.difference(&other.set).cloned().collect(),
         }
-        set
     }
 
     pub fn union(&self, other: &Self) -> Self {
-        let mut set = CustomSet { set: Vec::new() };
-        for element in self.set.iter().chain(other.set.iter()) {
-            set.add(element.clone());
+        Self {
+            set: self.set.union(&other.set).cloned().collect(),
         }
-        set
     }
 }

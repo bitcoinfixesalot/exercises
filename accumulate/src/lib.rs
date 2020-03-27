@@ -1,6 +1,10 @@
-pub fn map<A, B, F>(input: Vec<A>, function: F) -> Vec<B>
+pub fn map<A, B, F>(input: Vec<A>, mut function: F) -> Vec<B>
 where
     F: FnMut(A) -> B,
 {
-    input.into_iter().map(function).collect::<Vec<B>>()
+    let mut result = Vec::with_capacity(input.len());
+    for i in input {
+        result.push(function(i));
+    }
+    result
 }

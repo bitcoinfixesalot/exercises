@@ -1,16 +1,19 @@
+use rayon::prelude::*;
 use std::collections::HashSet;
 
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
-    let mut result: HashSet<[u32; 3]> = HashSet::new();
-    for a in 1..sum {
-        for b in a..sum {
-            let candidate = a * a + b * b;
-            let root = (candidate as f32).sqrt() as u32;
+    (1..(sum / 3))
+        .into_par_iter()
+        .filter_map(|a| {
+            let b_c = sum - a;
+            let b = (b_c.pow(2) - a.pow(2)) / (2 * b_c);
+            let c = b_c - b;
 
-            if root * root == candidate && a + b + root == sum {
-                result.insert([a, b, root]);
+            if a < b && a.pow(2) + b.pow(2) == c.pow(2) {
+                Some([a, b, c])
+            } else {
+                None
             }
-        }
-    }
-    result
+        })
+        .collect::<HashSet<[u32; 3]>>()
 }

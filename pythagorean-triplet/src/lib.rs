@@ -1,5 +1,16 @@
 use std::collections::HashSet;
 
 pub fn find(sum: u32) -> HashSet<[u32; 3]> {
-    unimplemented!("Given the sum {}, return all possible Pythagorean triplets, which produce the said sum, or an empty HashSet if there are no such triplets. Note that you are expected to return triplets in [a, b, c] order, where a < b < c", sum);
+    let mut result: HashSet<[u32; 3]> = HashSet::new();
+    for a in 1..sum {
+        for b in a..sum {
+            let candidate = a * a + b * b;
+            let root = (candidate as f32).sqrt() as u32;
+
+            if root * root == candidate && a + b + root == sum {
+                result.insert([a, b, root]);
+            }
+        }
+    }
+    result
 }

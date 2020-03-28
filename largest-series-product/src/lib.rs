@@ -9,22 +9,20 @@ pub fn lsp(string_digits: &str, span: usize) -> Result<u64, Error> {
         0 => Ok(1),
         _ if span > string_digits.len() => Err(Error::SpanTooLong),
         _ => {
-            let input: Vec<char> = string_digits.chars().collect();
-            let mut max_product: u64 = 0;
-            for window in input.windows(span) {
-                let mut product: u64 = 1;
-                for c in window {
-                    if c.is_ascii_digit() {
-                        product *= (*c as u64) - u64::from(b'0');
-                    } else {
-                        return Err(Error::InvalidDigit(*c));
-                    }
-                }
-                if product > max_product {
-                    max_product = product;
-                }
-            }
-            Ok(max_product)
+            let string_digits: Vec<u64> = string_digits
+                .chars()
+                .map(|c| {
+                    c.to_digit(10)
+                        .and_then(|n| Some(n as u64))
+                        .ok_or_else(|| Error::InvalidDigit(c))
+                })
+                .collect::<Result<Vec<_>, _>>()?;
+
+            Ok(string_digits
+                .windows(span)
+                .map(|arr| arr.iter().product())
+                .max()
+                .unwrap())
         }
     }
 }

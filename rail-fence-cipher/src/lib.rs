@@ -10,51 +10,27 @@ impl RailFence {
     }
 
     pub fn encode(&self, text: &str) -> String {
-        if self.rails == 1 {
-            text.to_string()
-        } else {
-            self.positions(text)
-                .into_iter()
-                .map(|position| text.chars().nth(position).unwrap())
-                .collect()
+        let mut result = vec![Vec::new(); self.rails];
+        for (c, i) in text.chars().zip(zigzag(self.rails)) {
+            result[i].push(c);
         }
+        result.iter().flat_map(|c| c).collect::<String>()
     }
 
     pub fn decode(&self, cipher: &str) -> String {
-        if self.rails == 1 {
-            cipher.to_string()
-        } else {
-            let positions = self.positions(cipher);
-            let mut text = vec![' '; positions.len()];
-            for (i, c) in cipher.chars().enumerate() {
-                let position = positions[i];
-                text[position] = c;
-            }
-            text.into_iter().collect()
-        }
-    }
+        let mut indexes: Vec<_> = zigzag(self.rails).zip(1..).take(cipher.len()).collect();
+        indexes.sort();
 
-    fn positions(&self, input: &str) -> Vec<usize> {
-        assert!(self.rails > 1);
-        let length = input.chars().count();
-        let mut matrix = vec![vec![(' ', false); length]; self.rails];
-        for (col, c) in input.chars().enumerate() {
-            let pad = 2 * self.rails - 2;
-            let row = if col % pad < pad / 2 {
-                col % pad
-            } else {
-                pad - col % pad
-            };
-            matrix[row][col] = (c, true);
-        }
-        let order: Vec<usize> = matrix
-            .into_iter()
-            .flat_map(|row| {
-                row.into_iter()
-                    .enumerate()
-                    .filter_map(|(col, (_, x))| if x { Some(col) } else { None })
-            })
+        let mut char_with_index: Vec<_> = cipher
+            .chars()
+            .zip(indexes)
+            .map(|(c, (_, i))| (i, c))
             .collect();
-        order
+        char_with_index.sort();
+        char_with_index.iter().map(|(_, c)| c).collect()
     }
+}
+
+fn zigzag(n: usize) -> impl Iterator<Item = usize> {
+    (0..n - 1).chain((1..n).rev()).cycle()
 }

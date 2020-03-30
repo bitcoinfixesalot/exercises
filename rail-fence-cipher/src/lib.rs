@@ -1,11 +1,12 @@
-pub struct RailFence{
+pub struct RailFence {
     rails: usize,
 }
 
 impl RailFence {
     pub fn new(rails: u32) -> RailFence {
-        RailFence{rails: rails as usize}
-
+        RailFence {
+            rails: rails as usize,
+        }
     }
 
     pub fn encode(&self, text: &str) -> String {

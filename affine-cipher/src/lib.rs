@@ -11,7 +11,9 @@ pub enum AffineCipherError {
 /// Encodes the plaintext using the affine cipher with key (`a`, `b`). Note that, rather than
 /// returning a return code, the more common convention in Rust is to return a `Result`.
 pub fn encode(plaintext: &str, a: i32, b: i32) -> Result<String, AffineCipherError> {
-    if gcd(a, MODULUS) != 1 { return Err(AffineCipherError::NotCoprime(a)); }
+    if gcd(a, MODULUS) != 1 {
+        return Err(AffineCipherError::NotCoprime(a));
+    }
     let encode_char = |c: char| {
         if c.is_ascii_digit() {
             c
@@ -21,25 +23,29 @@ pub fn encode(plaintext: &str, a: i32, b: i32) -> Result<String, AffineCipherErr
             encode as u8 as char
         }
     };
-    let ret = plaintext.chars()
-                       .filter(char::is_ascii_alphanumeric)
-                       .map(|c| c.to_ascii_lowercase())
-                       .map(|c| encode_char(c))
-                       .collect::<Vec::<char>>()
-                       .chunks(5)
-                       .map(|slice| slice.iter().cloned().collect::<String>())
-                       .collect::<Vec<String>>()
-                       .join(" ");
+    let ret = plaintext
+        .chars()
+        .filter(char::is_ascii_alphanumeric)
+        .map(|c| c.to_ascii_lowercase())
+        .map(|c| encode_char(c))
+        .collect::<Vec<char>>()
+        .chunks(5)
+        .map(|slice| slice.iter().cloned().collect::<String>())
+        .collect::<Vec<String>>()
+        .join(" ");
     Ok(ret)
 }
 
 /// Decodes the ciphertext using the affine cipher with key (`a`, `b`). Note that, rather than
 /// returning a return code, the more common convention in Rust is to return a `Result`.
 pub fn decode(ciphertext: &str, a: i32, b: i32) -> Result<String, AffineCipherError> {
-    if gcd(a, MODULUS) != 1 { return Err(AffineCipherError::NotCoprime(a)); }
-    let inv: i32 = (1..).filter(|i| (*i * a).rem_euclid(MODULUS) == 1)
-                        .next()
-                        .unwrap();
+    if gcd(a, MODULUS) != 1 {
+        return Err(AffineCipherError::NotCoprime(a));
+    }
+    let inv: i32 = (1..)
+        .filter(|i| (*i * a).rem_euclid(MODULUS) == 1)
+        .next()
+        .unwrap();
     let decode_char = |c: char| {
         if c.is_ascii_digit() {
             c
@@ -49,14 +55,16 @@ pub fn decode(ciphertext: &str, a: i32, b: i32) -> Result<String, AffineCipherEr
             decode as u8 as char
         }
     };
-    let ret: String = ciphertext.chars()
-                                .filter(char::is_ascii_alphanumeric)
-                                .map(decode_char)
-                                .collect();
+    let ret: String = ciphertext
+        .chars()
+        .filter(char::is_ascii_alphanumeric)
+        .map(decode_char)
+        .collect();
     Ok(ret)
 }
 fn gcd<T>(a: T, b: T) -> T
-where T: Eq + PartialOrd + Sub<Output=T> + Rem<Output=T> + Copy,
+where
+    T: Eq + PartialOrd + Sub<Output = T> + Rem<Output = T> + Copy,
 {
     if a % b == a - a {
         b

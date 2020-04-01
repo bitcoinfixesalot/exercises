@@ -1,41 +1,57 @@
 pub fn count(lines: &[&str]) -> u32 {
-    (0..lines.len())
-        .flat_map(|i| std::iter::repeat(i).zip(0..lines[i].len()))
-        .map(|(i, j)| count_rectangles(&lines, i, j))
+    lines
+        .iter()
+        .enumerate()
+        .map(|(row, line)| {
+            line.as_bytes()
+                .iter()
+                .enumerate()
+                .filter(|&(_, &c)| is_corner(c))
+                .map(|(col, _)| count_rectangles_with_corner(lines, row, col))
+                .sum::<u32>()
+        })
         .sum()
 }
 
-fn count_rectangles(lines: &[&str], i: usize, j: usize) -> u32 {
-    if &lines[i][j..=j] != "+" {
-        return 0;
+fn count_rectangles_with_corner(lines: &[&str], row: usize, col1: usize) -> u32 {
+    if let Some(line) = lines.get(row) {
+        line.as_bytes()
+            .iter()
+            .enumerate()
+            .skip(col1 + 1)
+            .take_while(|&(_, &c)| is_horizontal(c))
+            .filter(|&(_, &c)| is_corner(c))
+            .map(|(col2, _)| count_rectangles_with_base(lines, row, col1, col2))
+            .sum()
+    } else {
+        0
     }
-    ((i + 1)..lines.len())
-        .flat_map(|m| std::iter::repeat(m).zip((j + 1)..lines[m].len()))
-        .filter(|(m, n)| is_rectancle(&lines, i, j, *m, *n))
+}
+
+fn count_rectangles_with_base(lines: &[&str], row: usize, col1: usize, col2: usize) -> u32 {
+    lines
+        .iter()
+        .map(|line| line.as_bytes())
+        .skip(row + 1)
+        .take_while(|line| line.get(col1).map(|&c| is_vertical(c)) == Some(true))
+        .take_while(|line| line.get(col2).map(|&c| is_vertical(c)) == Some(true))
+        .filter(|line| {
+            line.iter()
+                .skip(col1)
+                .take(col2 - col1)
+                .all(|&c| is_horizontal(c))
+        })
         .count() as u32
 }
 
-fn is_rectancle(lines: &[&str], i: usize, j: usize, m: usize, n: usize) -> bool {
-    if &lines[i][j..=j] != "+"
-        || &lines[i][n..=n] != "+"
-        || &lines[m][j..=j] != "+"
-        || &lines[m][n..=n] != "+"
-    {
-        return false;
-    }
-    for line in lines.iter().take(m).skip(i) {
-        if !(&line[j..=j] == "|" || &line[j..=j] == "+")
-            || !(&line[n..=n] == "|" || &line[n..=n] == "+")
-        {
-            return false;
-        }
-    }
-    for h in j..n {
-        if !(&lines[i][h..=h] == "-" || &lines[i][h..=h] == "+")
-            || !(&lines[m][h..=h] == "-" || &lines[m][h..=h] == "+")
-        {
-            return false;
-        }
-    }
-    true
+fn is_corner(symbol: u8) -> bool {
+    symbol == b'+'
+}
+
+fn is_vertical(c: u8) -> bool {
+    c == b'|' || c == b'+'
+}
+
+fn is_horizontal(c: u8) -> bool {
+    c == b'-' || c == b'+'
 }

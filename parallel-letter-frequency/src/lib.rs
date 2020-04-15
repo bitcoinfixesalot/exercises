@@ -16,9 +16,9 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
             result
         })
         .reduce(HashMap::new, |mut result, hmap| {
-            hmap.iter().for_each(|(&key, &value)| {
+            for (&key, &value) in hmap.iter() {
                 *result.entry(key).or_insert(0) += value;
-            });
+            }
             result
         })
 }

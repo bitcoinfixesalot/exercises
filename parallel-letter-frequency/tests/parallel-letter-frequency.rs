@@ -70,7 +70,6 @@ fn test_many_empty_lines() {
 }
 
 #[test]
-#[ignore]
 fn test_many_times_same_text() {
     let mut v = Vec::with_capacity(1000);
     for _ in 0..1000 {
